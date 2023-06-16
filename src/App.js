@@ -1,25 +1,26 @@
-import logo from './logo.svg';
 import './App.css';
+// lazy load components based on screen size
+import { lazy, Suspense } from 'react';
+const Desktop = lazy(() => import('./components/Desktop'));
+const Tablet = lazy(() => import('./components/Tablet'));
+const Mobile = lazy(() => import('./components/Mobile'));
 
+// based on screen size, render the appropriate component
 function App() {
+  const width = window.innerWidth;
+  // apply those conditions in jsx itslef
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Suspense fallback={<div>Loading...</div>}>
+        {width > 1024 ? (
+          <Desktop />
+        ) : width > 768 ? (
+          <Tablet />
+        ) : (
+          <Mobile />
+        )}
+      </Suspense>
     </div>
   );
 }
-
 export default App;
